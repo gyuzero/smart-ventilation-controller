@@ -10,6 +10,8 @@
 
 
     <string name="label_state">상태:</string>
+    <string name="label_data">데이터:</string>
+
 
     <!-- Menu items -->
     <string name="menu_connect">연결</string>
