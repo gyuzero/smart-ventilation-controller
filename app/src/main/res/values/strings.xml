@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">ble-controller</string>
 
+    <string name="title_devices">BLE 장치 스캔</string>
     <string name="unknown_device">Unknown device</string>
     <string name="unknown_characteristic">Unknown characteristic</string>
     <string name="unknown_service">Unknown service</string>
@@ -8,14 +9,40 @@
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
 
+    <string name="label_in">실내 공기질</string>
+    <string name="label_out">실외 공기질</string>
+    <string name="label_control">제어</string>
 
-    <string name="label_state">상태:</string>
-    <string name="label_data">데이터:</string>
+    <string name="label_state">연결상태</string>
+    <string name="label_powerOn">ON</string>
+    <string name="label_powerOff">OFF</string>
+    <string name="label_damperOpen">OPEN</string>
+    <string name="label_damperClose">CLOSE</string>
+    <string name="label_auto">자동</string>
+    <string name="label_manual">수동</string>
+    <string name="label_up">▲</string>
+    <string name="label_down">▼</string>
 
+    <string name="label_power">파워</string>
+    <string name="label_co2">CO2</string>
+    <string name="label_voc">VOC</string>
+    <string name="label_rh">습도</string>
+    <string name="label_temp">온도</string>
+    <string name="label_dust">미세먼지</string>
+    <string name="label_mode">모드</string>
+    <string name="label_damper">댐퍼</string>
+    <string name="label_fan">풍량</string>
+    
+    <string name="unit_temp">℃</string>
+    <string name="unit_rh">％</string>
+    <string name="unit_voc">ppm</string>
+    <string name="unit_dust">㎍</string>
 
     <!-- Menu items -->
     <string name="menu_connect">연결</string>
     <string name="menu_disconnect">해제</string>
     <string name="menu_scan">검색</string>
     <string name="menu_stop">정지</string>
+
+
 </resources>

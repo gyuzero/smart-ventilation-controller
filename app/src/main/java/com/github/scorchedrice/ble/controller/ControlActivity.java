@@ -36,7 +36,6 @@ public class ControlActivity extends AppCompatActivity {
     private String mDeviceAddress;
 
     private TextView mConnectionState;
-    private TextView mData;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -98,15 +97,14 @@ public class ControlActivity extends AppCompatActivity {
 
     private void displayData(String data) {
         if (data != null) {
-            mData.setText(data);
+            Log.d(TAG, data);
         }
     }
 
     private void init() {
-        mConnectionState = findViewById(R.id.mConnectionState);
-        mData = findViewById(R.id.mData);
         getSupportActionBar().setTitle(mDeviceName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mConnectionState = findViewById(R.id.mConnectionState);
     }
 
     @Override

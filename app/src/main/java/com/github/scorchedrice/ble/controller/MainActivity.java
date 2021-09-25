@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void init() {
+        getSupportActionBar().setTitle(R.string.title_devices);
         handler = new Handler();
         leDeviceList = findViewById(R.id.leDeviceList);
         leDeviceList.setOnItemClickListener(this);
