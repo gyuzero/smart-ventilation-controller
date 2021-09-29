@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller;
+package com.github.scorchedrice.ble.controller.service;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -17,6 +17,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import com.github.scorchedrice.ble.controller.util.SampleGattAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +47,9 @@ public class BluetoothLeService extends Service {
 
     public final static UUID HM_RX_TX =
             UUID.fromString(SampleGattAttributes.HM_RM_TX);
+
+    private StringBuilder buf = new StringBuilder();
+    private static final int BUF_SIZE = 60;
 
     public class LocalBinder extends Binder {
         public BluetoothLeService getService() {
@@ -115,6 +120,8 @@ public class BluetoothLeService extends Service {
     }
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+
+
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
@@ -168,13 +175,16 @@ public class BluetoothLeService extends Service {
         final Intent intent = new Intent(action);
 
         if (HM_RX_TX.equals(characteristic.getUuid())) {
-            // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
-            if (data != null && data.length > 0) {
-                final StringBuilder stringBuilder = new StringBuilder(data.length);
-                for (byte byteChar : data)
-                    stringBuilder.append(String.format("%02X ", byteChar));
-                intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
+            if (data != null && data.length > 0 && buf.length() < BUF_SIZE) {
+                for (byte byteChar : data) {
+                    buf.append(String.format("%02X", byteChar));
+                    if (byteChar == 0x50) {
+                        intent.putExtra(EXTRA_DATA, buf.toString());
+                        buf.setLength(0);
+                        break;
+                    }
+                }
             }
         }
         sendBroadcast(intent);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".ControlActivity">
+    tools:context=".activity.LeDeviceControlActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -104,7 +104,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="28"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -112,6 +111,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="@string/unit_temp" />
 
                     </LinearLayout>
@@ -141,7 +141,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="56"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -149,6 +148,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="@string/unit_rh" />
                     </LinearLayout>
 
@@ -177,7 +177,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="6"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -185,6 +184,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="@string/unit_dust" />
                     </LinearLayout>
 
@@ -213,7 +213,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="0"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -221,6 +220,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="@string/unit_voc" />
                     </LinearLayout>
 
@@ -249,7 +249,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="22"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -257,6 +256,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="center"
                             android:text="@string/unit_voc" />
                     </LinearLayout>
 
@@ -303,7 +303,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="28"
                         android:textColor="#818282"
                         android:textSize="14sp" />
 
@@ -311,6 +310,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/unit_temp" />
                 </LinearLayout>
 
@@ -359,7 +359,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/label_auto"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -387,7 +386,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="1"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 
@@ -414,7 +412,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/label_damperOpen"
                             android:textColor="#818282"
                             android:textSize="14sp" />
 

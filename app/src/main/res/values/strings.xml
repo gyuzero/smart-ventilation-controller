@@ -18,6 +18,7 @@
     <string name="label_powerOff">OFF</string>
     <string name="label_damperOpen">OPEN</string>
     <string name="label_damperClose">CLOSE</string>
+    <string name="label_error">ERROR</string>
     <string name="label_auto">자동</string>
     <string name="label_manual">수동</string>
     <string name="label_up">▲</string>

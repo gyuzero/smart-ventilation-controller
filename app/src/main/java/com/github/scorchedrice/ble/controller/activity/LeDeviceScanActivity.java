@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller;
+package com.github.scorchedrice.ble.controller.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,15 +10,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,9 +22,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
+import com.github.scorchedrice.ble.controller.R;
+import com.github.scorchedrice.ble.controller.adapter.LeDeviceListAdapter;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class LeDeviceScanActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private BluetoothAdapter bluetoothAdapter;
     private boolean mScanning;
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_ledevice_scan);
 
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
@@ -150,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         final BluetoothDevice device = leDeviceListAdapter.getDevice(i);
         if (device == null) return;
-        final Intent intent = new Intent(this, ControlActivity.class);
-        intent.putExtra(ControlActivity.EXTRAS_DEVICE_NAME, device.getName());
-        intent.putExtra(ControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        final Intent intent = new Intent(this, LeDeviceControlActivity.class);
+        intent.putExtra(LeDeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
+        intent.putExtra(LeDeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
             bluetoothAdapter.stopLeScan(leScanCallback);
             mScanning = false;
@@ -160,81 +157,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startActivity(intent);
     }
 
-    private class LeDeviceListAdapter extends BaseAdapter {
-
-        private ArrayList<BluetoothDevice> leDevices;
-        private LayoutInflater inflater;
-
-        public LeDeviceListAdapter() {
-            leDevices = new ArrayList<>();
-            inflater = MainActivity.this.getLayoutInflater();
-        }
-
-        public void addDevice(BluetoothDevice leDevice) {
-            if (!leDevices.contains(leDevice))
-                leDevices.add(leDevice);
-        }
-
-        public BluetoothDevice getDevice(int position) {
-            return leDevices.get(position);
-        }
-
-
-        @Override
-        public int getCount() {
-            return leDevices.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return leDevices.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        public void clear() {
-            leDevices.clear();
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-
-            ViewHolder viewHolder;
-
-            if (view == null) {
-                view = inflater.inflate(R.layout.listitem_device, null);
-                viewHolder = new ViewHolder();
-                viewHolder.deviceName = view.findViewById(R.id.device_name);
-                viewHolder.deviceAddress = view.findViewById(R.id.device_address);
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-            BluetoothDevice device = leDevices.get(i);
-            String deviceName = device.getName();
-            if (deviceName != null && deviceName.length() > 0)
-                viewHolder.deviceName.setText(deviceName);
-            else
-                viewHolder.deviceName.setText(R.string.unknown_device);
-            viewHolder.deviceAddress.setText(device.getAddress());
-
-            return view;
-        }
-    }
-
-    static class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        leDeviceListAdapter = new LeDeviceListAdapter();
+        leDeviceListAdapter = new LeDeviceListAdapter(getLayoutInflater());
         leDeviceList.setAdapter(leDeviceListAdapter);
     }
 
