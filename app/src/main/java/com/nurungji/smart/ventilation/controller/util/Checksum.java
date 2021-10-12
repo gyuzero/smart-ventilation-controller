@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller.util;
+package com.nurungji.smart.ventilation.controller.util;
 
 public class Checksum {
 

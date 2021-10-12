@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller.viewholder;
+package com.nurungji.smart.ventilation.controller.viewholder;
 
 import android.widget.TextView;
 

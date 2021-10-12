@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller.service;
+package com.nurungji.smart.ventilation.controller.service;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -18,7 +18,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.github.scorchedrice.ble.controller.util.SampleGattAttributes;
+import com.nurungji.smart.ventilation.controller.util.SampleGattAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -46,7 +46,7 @@ public class BluetoothLeService extends Service {
             "com.example.bluetooth.le.EXTRA_DATA";
 
     public final static UUID HM_RX_TX =
-            UUID.fromString(SampleGattAttributes.HM_RM_TX);
+            UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 
     private StringBuilder buf = new StringBuilder();
     private static final int BUF_SIZE = 60;

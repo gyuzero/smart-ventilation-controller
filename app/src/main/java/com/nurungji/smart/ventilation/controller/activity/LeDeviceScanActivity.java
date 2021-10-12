@@ -1,4 +1,4 @@
-package com.github.scorchedrice.ble.controller.activity;
+package com.nurungji.smart.ventilation.controller.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,7 +23,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.scorchedrice.ble.controller.R;
-import com.github.scorchedrice.ble.controller.adapter.LeDeviceListAdapter;
+import com.nurungji.smart.ventilation.controller.adapter.LeDeviceListAdapter;
+import com.nurungji.smart.ventilation.controller.util.SampleGattAttributes;
+
+import java.util.UUID;
 
 public class LeDeviceScanActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -37,6 +40,7 @@ public class LeDeviceScanActivity extends AppCompatActivity implements AdapterVi
 
     private LeDeviceListAdapter leDeviceListAdapter;
     private ListView leDeviceList;
+    private static final UUID[] UUIDS = {UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb")};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,6 @@ public class LeDeviceScanActivity extends AppCompatActivity implements AdapterVi
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
-
         init();
     }
 
@@ -79,7 +82,7 @@ public class LeDeviceScanActivity extends AppCompatActivity implements AdapterVi
             }, SCAN_PERIOD);
 
             mScanning = true;
-            bluetoothAdapter.startLeScan(leScanCallback);
+            bluetoothAdapter.startLeScan(UUIDS, leScanCallback);
         } else {
             mScanning = false;
             bluetoothAdapter.stopLeScan(leScanCallback);

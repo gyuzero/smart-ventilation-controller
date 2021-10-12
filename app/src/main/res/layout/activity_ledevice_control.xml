@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context=".activity.LeDeviceControlActivity">
+    tools:context="com.nurungji.smart.ventilation.controller.activity.LeDeviceControlActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,43 +23,6 @@
 <!--            app:layout_constraintEnd_toEndOf="parent"-->
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent">-->
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="8dp">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="center"
-                        android:text="@string/label_state"
-                        android:textColor="#4169b1"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/mConnectionState"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8"
-                        android:gravity="center"
-                        android:textAlignment="center"
-                        android:textColor="#818282"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"

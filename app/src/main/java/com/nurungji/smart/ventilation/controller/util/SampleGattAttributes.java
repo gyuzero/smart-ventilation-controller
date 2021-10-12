@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.scorchedrice.ble.controller.util;
+package com.nurungji.smart.ventilation.controller.util;
 
 import java.util.HashMap;
 

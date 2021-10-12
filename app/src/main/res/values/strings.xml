@@ -39,6 +39,9 @@
     <string name="unit_voc">ppm</string>
     <string name="unit_dust">㎍</string>
 
+    <string name="maxFanSpeed">최대 풍속 입니다.</string>
+    <string name="minFanSpeed">최저 풍속 입니다.</string>
+
     <!-- Menu items -->
     <string name="menu_connect">연결</string>
     <string name="menu_disconnect">해제</string>
