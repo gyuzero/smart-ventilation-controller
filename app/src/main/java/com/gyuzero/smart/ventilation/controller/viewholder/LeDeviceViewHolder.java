@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.viewholder;
+package com.gyuzero.smart.ventilation.controller.viewholder;
 
 import android.widget.TextView;
 

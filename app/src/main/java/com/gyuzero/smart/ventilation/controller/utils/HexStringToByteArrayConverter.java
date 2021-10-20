@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.util;
+package com.gyuzero.smart.ventilation.controller.utils;
 
 public class HexStringToByteArrayConverter {
 

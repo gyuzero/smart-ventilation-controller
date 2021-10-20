@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.activity;
+package com.gyuzero.smart.ventilation.controller.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -23,8 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.scorchedrice.ble.controller.R;
-import com.nurungji.smart.ventilation.controller.adapter.LeDeviceListAdapter;
-import com.nurungji.smart.ventilation.controller.util.SampleGattAttributes;
+import com.gyuzero.smart.ventilation.controller.adapter.LeDeviceListAdapter;
 
 import java.util.UUID;
 

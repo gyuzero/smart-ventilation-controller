@@ -22,10 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Blecontroller" >
         <activity
-            android:name="com.nurungji.smart.ventilation.controller.activity.LeDeviceControlActivity"
+            android:name="com.gyuzero.smart.ventilation.controller.activity.LeDeviceControlActivity"
             android:exported="true" />
         <activity
-            android:name="com.nurungji.smart.ventilation.controller.activity.LeDeviceScanActivity"
+            android:name="com.gyuzero.smart.ventilation.controller.activity.LeDeviceScanActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name="com.nurungji.smart.ventilation.controller.service.BluetoothLeService"
+            android:name="com.gyuzero.smart.ventilation.controller.service.BluetoothLeService"
             android:enabled="true" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.adapter;
+package com.gyuzero.smart.ventilation.controller.adapter;
 
 import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.github.scorchedrice.ble.controller.R;
-import com.nurungji.smart.ventilation.controller.viewholder.LeDeviceViewHolder;
+import com.gyuzero.smart.ventilation.controller.viewholder.LeDeviceViewHolder;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.activity;
+package com.gyuzero.smart.ventilation.controller.activity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
@@ -21,16 +21,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.scorchedrice.ble.controller.R;
-import com.nurungji.smart.ventilation.controller.service.BluetoothLeService;
-import com.nurungji.smart.ventilation.controller.util.Checksum;
-import com.nurungji.smart.ventilation.controller.util.HexStringToByteArrayConverter;
+import com.gyuzero.smart.ventilation.controller.client.VentClient;
+import com.gyuzero.smart.ventilation.controller.service.BluetoothLeService;
+import com.gyuzero.smart.ventilation.controller.utils.Checksum;
+import com.gyuzero.smart.ventilation.controller.utils.HexStringToByteArrayConverter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LeDeviceControlActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = LeDeviceControlActivity.class.getSimpleName();
-
 
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -64,18 +65,19 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
 
     private static final byte START_CODE = 0x5C;
     private static final byte TYPE = 0x57;
-    private static final byte DEFAULT_BYTE = 0x30;
     private static final byte END_CODE = 0x50;
     private static final int CHECKSUM_1 = 7;
     private static final int CHECKSUM_2 = 8;
     private static final byte POWER = 0x31;
     private static final byte DAMPER = 0x32;
     private static final byte MODE = 0x33;
-    private static final byte FANSPEED = 0x34;
+    private static final byte FAN_SPEED = 0x34;
 
     private Toast toastMaxFanSpeed;
     private Toast toastMinFanSpeed;
     private Toast toastDisconnected;
+
+    private VentClient ventClient;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -108,9 +110,9 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                selectGattServices(mBluetoothLeService.getSupportedGattServices());
+                getGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                recvDataMapping(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
         }
     };
@@ -163,6 +165,7 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
         toastMinFanSpeed = Toast.makeText(this, R.string.minFanSpeed, Toast.LENGTH_SHORT);
         toastDisconnected = Toast.makeText(this, R.string.disconnected, Toast.LENGTH_SHORT);
 
+        ventClient = new VentClient();
     }
 
     @Override
@@ -175,7 +178,7 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
         return super.onOptionsItemSelected(item);
     }
 
-    private void selectGattServices(List<BluetoothGattService> gattServices) {
+    private void getGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         BluetoothGattCharacteristic characteristic = null;
 
@@ -198,6 +201,100 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
             mBluetoothLeService.setCharacteristicNotification(
                     characteristic, true);
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (mConnected) {
+            switch (view.getId()) {
+                case R.id.btnPowerOn:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(POWER, (byte) 1));
+                    break;
+
+                case R.id.btnPowerOff:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(POWER, (byte) 0));
+                    break;
+
+                case R.id.btnDamperOpen:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(DAMPER, (byte) 1));
+                    break;
+
+                case R.id.btnDamperClose:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(DAMPER, (byte) 0));
+                    break;
+
+                case R.id.btnAuto:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(MODE, (byte) 1));
+                    break;
+
+                case R.id.btnManual:
+                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(MODE, (byte) 0));
+                    break;
+
+                case R.id.btnFanUp:
+                    if (ventClient.getFanSpeed() < 5)
+                        mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(FAN_SPEED, (byte) (ventClient.getFanSpeed() + 1)));
+                    else toastMaxFanSpeed.show();
+                    break;
+
+                case R.id.btnFanDown:
+                    if (ventClient.getFanSpeed() > 1)
+                        mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(FAN_SPEED, (byte) (ventClient.getFanSpeed() - 1)));
+                    else toastMinFanSpeed.show();
+                    break;
+            }
+        } else toastDisconnected.show();
+    }
+
+    private void recvDataMapping(String data) {
+        if (data != null) {
+            final byte[] payload = HexStringToByteArrayConverter.hexStringToByteArray(data);
+
+            if (payload[0] == START_CODE && payload[29] == END_CODE && Checksum.checksum(payload)) {
+                ventClient.setFanSpeed(payload[3] & 0x0F);
+                ventClient.setInTemp((double) (((payload[4] & 0x0F) << 8) + ((payload[5] & 0x0F) << 4) + (payload[6] & 0x0F)) / 10);
+                ventClient.setRh((double) (((payload[7] & 0x0F) << 8) + ((payload[8] & 0x0F) << 4) + (payload[9] & 0x0F)) / 10);
+                ventClient.setOutTemp((double) (((payload[10] & 0x0F) << 8) + ((payload[11] & 0x0F) << 4) + (payload[12] & 0x0F)) / 10);
+                ventClient.setDust(((payload[13] & 0x0F) << 12) + ((payload[14] & 0x0F) << 8) + ((payload[15] & 0x0F) << 4) + (payload[16] & 0x0F));
+                ventClient.setCo2(((payload[17] & 0x0F) << 12) + ((payload[18] & 0x0F) << 8) + ((payload[19] & 0x0F) << 4) + (payload[20] & 0x0F));
+                ventClient.setVoc(((payload[21] & 0x0F) << 8) + ((payload[22] & 0x0F) << 4) + (payload[23] & 0x0F));
+                ventClient.setMode(payload[24] & 0x0F);
+                ventClient.setDamper(payload[25] & 0x0F);
+                ventClient.setFanStatus(payload[26] & 0x0F);
+                viewMapping();
+            }
+        }
+    }
+
+    public static byte[] send(byte id, byte value) {
+        value += 0x30;
+        byte[] data = {START_CODE, TYPE, id, 0x30, 0x30, 0x30, value, 0, 0, END_CODE};
+        int checksum = Checksum.createChecksum(data);
+        data[CHECKSUM_1] = (byte) (((checksum & 0xF0) >> 4) + 0x30);
+        data[CHECKSUM_2] = (byte) ((checksum & 0x0F) + 0x30);
+        return data;
+    }
+
+    private void viewMapping() {
+//        Log.d(TAG, ventClient.toString());
+        inTempVal.setText(String.valueOf(ventClient.getInTemp()));
+        outTempVal.setText(String.valueOf(ventClient.getOutTemp()));
+        rhVal.setText(String.valueOf(ventClient.getRh()));
+        dustVal.setText(String.valueOf(ventClient.getDust()));
+        co2Val.setText(String.valueOf(ventClient.getCo2()));
+        vocVal.setText(String.valueOf(ventClient.getVoc()));
+
+        if (ventClient.getFanStatus() == 1) fanVal.setText(R.string.label_error);
+        else fanVal.setText(String.valueOf(ventClient.getFanSpeed()));
+
+        int mode = ventClient.getMode();
+        if (mode == 0) modeVal.setText(R.string.label_manual);
+        else if (mode == 1) modeVal.setText(R.string.label_auto);
+
+        int damper = ventClient.getDamper();
+        if (damper == 0) damperVal.setText(R.string.label_damperClose);
+        else if (damper == 1) damperVal.setText(R.string.label_damperOpen);
+        else if (damper == 2) damperVal.setText(R.string.label_error);
     }
 
     // 듣고자 하는 이벤트(액션)
@@ -231,105 +328,5 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
         super.onDestroy();
         unbindService(mServiceConnection);
         mBluetoothLeService = null;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (mConnected) {
-            String fanvaltext = fanVal.getText().toString();
-            int speed = 0;
-            if (!fanvaltext.equals("")) {
-                speed = Integer.parseInt(fanVal.getText().toString());
-            }
-
-            switch (view.getId()) {
-                case R.id.btnPowerOn:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(POWER, (byte) 0x31));
-                    break;
-
-                case R.id.btnPowerOff:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(POWER, (byte) 0x30));
-                    break;
-
-                case R.id.btnDamperOpen:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(DAMPER, (byte) 0x31));
-                    break;
-
-                case R.id.btnDamperClose:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(DAMPER, (byte) 0x30));
-                    break;
-
-                case R.id.btnAuto:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(MODE, (byte) 0x31));
-                    break;
-
-                case R.id.btnManual:
-                    mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(MODE, (byte) 0x30));
-                    break;
-
-                case R.id.btnFanUp:
-                    if (speed < 5) {
-                        speed += 0x30;
-                        mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(FANSPEED, (byte) ++speed));
-                    } else
-                        toastMaxFanSpeed.show();
-                    break;
-
-                case R.id.btnFanDown:
-                    if (speed > 1) {
-                        speed += 0x30;
-                        mBluetoothLeService.writeCharacteristic(mNotifyCharacteristic, send(FANSPEED, (byte) --speed));
-                    } else
-                        toastMinFanSpeed.show();
-                    break;
-            }
-        } else toastDisconnected.show();
-    }
-
-    private void displayData(String data) {
-        if (data != null) {
-            final byte[] payload = HexStringToByteArrayConverter.hexStringToByteArray(data);
-
-            if (payload[0] == 0x5C && payload[29] == 0x50 && Checksum.checksum(payload)) {
-                int fanspeed = payload[3] & 0x0F;
-                double temp1 = (double) (((payload[4] & 0x0F) << 8) + ((payload[5] & 0x0F) << 4) + (payload[6] & 0x0F)) / 10;
-                double rh = (double) (((payload[7] & 0x0F) << 8) + ((payload[8] & 0x0F) << 4) + (payload[9] & 0x0F)) / 10;
-                double temp2 = (double) (((payload[10] & 0x0F) << 8) + ((payload[11] & 0x0F) << 4) + (payload[12] & 0x0F)) / 10;
-                int dust = ((payload[13] & 0x0F) << 12) + ((payload[14] & 0x0F) << 8) + ((payload[15] & 0x0F) << 4) + (payload[16] & 0x0F);
-                int co2 = ((payload[17] & 0x0F) << 12) + ((payload[18] & 0x0F) << 8) + ((payload[19] & 0x0F) << 4) + (payload[20] & 0x0F);
-                int voc = ((payload[21] & 0x0F) << 8) + ((payload[22] & 0x0F) << 4) + (payload[23] & 0x0F);
-                int mode = payload[24] & 0x0F;
-                int damper = payload[25] & 0x0F;
-                int fan = payload[26] & 0x0F;
-
-                Log.d(TAG, String.format("fanspeed=%d, temp1=%.1f, rh=%.1f, temp2=%.1f, dust=%d, co2=%d, voc=%d, mode=%d, damper=%d, fan=%d",
-                        fanspeed, temp1, rh, temp2, dust, co2, voc, mode, damper, fan));
-
-                inTempVal.setText(String.valueOf(temp1));
-                outTempVal.setText(String.valueOf(temp2));
-                rhVal.setText(String.valueOf(rh));
-                dustVal.setText(String.valueOf(dust));
-                co2Val.setText(String.valueOf(co2));
-                vocVal.setText(String.valueOf(voc));
-
-                if (fan == 1) fanVal.setText(R.string.label_error);
-                else fanVal.setText(String.valueOf(fanspeed));
-
-                if (mode == 0) modeVal.setText(R.string.label_manual);
-                else if (mode == 1) modeVal.setText(R.string.label_auto);
-
-                if (damper == 0) damperVal.setText(R.string.label_damperClose);
-                else if (damper == 1) damperVal.setText(R.string.label_damperOpen);
-                else if (damper == 2) damperVal.setText(R.string.label_error);
-            }
-        }
-    }
-
-    public static byte[] send(byte id, byte value) {
-        byte[] data = {START_CODE, TYPE, id, DEFAULT_BYTE, DEFAULT_BYTE, DEFAULT_BYTE, value, 0, 0, END_CODE};
-        int checksum = Checksum.createChecksum(data);
-        data[CHECKSUM_1] = (byte) (((checksum & 0xF0) >> 4) + DEFAULT_BYTE);
-        data[CHECKSUM_2] = (byte) ((checksum & 0x0F) + DEFAULT_BYTE);
-        return data;
     }
 }

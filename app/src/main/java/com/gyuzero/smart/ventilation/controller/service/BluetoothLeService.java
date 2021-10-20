@@ -1,4 +1,4 @@
-package com.nurungji.smart.ventilation.controller.service;
+package com.gyuzero.smart.ventilation.controller.service;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -17,8 +17,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import com.nurungji.smart.ventilation.controller.util.SampleGattAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +45,8 @@ public class BluetoothLeService extends Service {
 
     public final static UUID HM_RX_TX =
             UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
+    public static String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
+
 
     private StringBuilder buf = new StringBuilder();
     private static final int BUF_SIZE = 60;
@@ -216,7 +216,7 @@ public class BluetoothLeService extends Service {
 
         if (HM_RX_TX.equals(characteristic.getUuid())) {
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                    UUID.fromString(CLIENT_CHARACTERISTIC_CONFIG));
             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
             mBluetoothGatt.writeDescriptor(descriptor);
         }
