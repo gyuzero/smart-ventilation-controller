@@ -24,6 +24,7 @@
             <!--            app:layout_constraintStart_toStartOf="parent"-->
             <!--            app:layout_constraintTop_toTopOf="parent">-->
 
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -398,19 +399,31 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnPowerOn"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_powerOn" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_power_24"
+                        android:text="@string/label_powerOn"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp"
+                        app:neumorph_shapeType="flat" />
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnPowerOff"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_powerOff" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_power_off_24"
+                        android:text="@string/label_powerOff"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp"
+                        app:neumorph_shapeType="flat" />
 
                 </LinearLayout>
 
@@ -422,19 +435,31 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnDamperOpen"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_damperOpen" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_air_24"
+                        android:text="@string/label_damperOpen"
+                        android:textSize="9sp"
+                        app:cornerRadius="100dp"
+                        app:neumorph_shapeType="flat" />
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnDamperClose"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_damperClose" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_close_24"
+                        android:text="@string/label_damperClose"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp"
+                        app:neumorph_shapeType="flat" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -445,19 +470,29 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnAuto"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_auto" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_autorenew_24"
+                        android:text="@string/label_auto"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp" />
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnManual"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_manual" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_person_24"
+                        android:text="@string/label_manual"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -468,25 +503,32 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnFanUp"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_up" />
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_arrow_drop_up_24"
+                        android:text="@string/label_up"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp" />
 
-                    <Button
+                    <soup.neumorphism.NeumorphFloatingActionButton
                         android:id="@+id/btnFanDown"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        style="@style/Widget.Neumorph.FloatingActionButton"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_weight="1"
-                        android:text="@string/label_down" />
-
-
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_arrow_drop_down_24"
+                        android:text="@string/label_down"
+                        android:textSize="8sp"
+                        app:cornerRadius="100dp" />
                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
     </ScrollView>

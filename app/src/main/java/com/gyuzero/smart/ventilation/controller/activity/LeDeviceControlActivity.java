@@ -26,8 +26,9 @@ import com.gyuzero.smart.ventilation.controller.service.BluetoothLeService;
 import com.gyuzero.smart.ventilation.controller.utils.Checksum;
 import com.gyuzero.smart.ventilation.controller.utils.HexStringToByteArrayConverter;
 
-import java.util.Arrays;
 import java.util.List;
+
+import soup.neumorphism.NeumorphFloatingActionButton;
 
 public class LeDeviceControlActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,24 +55,26 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
     private TextView modeVal;
     private TextView damperVal;
 
-    private Button btnPowerOn;
-    private Button btnPowerOff;
-    private Button btnDamperOpen;
-    private Button btnDamperClose;
-    private Button btnAuto;
-    private Button btnManual;
-    private Button btnFanUp;
-    private Button btnFanDown;
+    private NeumorphFloatingActionButton btnPowerOn;
+    private NeumorphFloatingActionButton btnPowerOff;
+    private NeumorphFloatingActionButton btnDamperOpen;
+    private NeumorphFloatingActionButton btnDamperClose;
+    private NeumorphFloatingActionButton btnAuto;
+    private NeumorphFloatingActionButton btnManual;
+    private NeumorphFloatingActionButton btnFanUp;
+    private NeumorphFloatingActionButton btnFanDown;
 
     private static final byte START_CODE = 0x5C;
     private static final byte TYPE = 0x57;
     private static final byte END_CODE = 0x50;
     private static final int CHECKSUM_1 = 7;
     private static final int CHECKSUM_2 = 8;
+
     private static final byte POWER = 0x31;
     private static final byte DAMPER = 0x32;
     private static final byte MODE = 0x33;
     private static final byte FAN_SPEED = 0x34;
+
 
     private Toast toastMaxFanSpeed;
     private Toast toastMinFanSpeed;
@@ -248,6 +251,7 @@ public class LeDeviceControlActivity extends AppCompatActivity implements View.O
 
     private void recvDataMapping(String data) {
         if (data != null) {
+            Log.d(TAG, data);
             final byte[] payload = HexStringToByteArrayConverter.hexStringToByteArray(data);
 
             if (payload[0] == START_CODE && payload[29] == END_CODE && Checksum.checksum(payload)) {

@@ -5,16 +5,16 @@ import lombok.Data;
 @Data
 public class VentClient {
 
-    private double inTemp;
-    private double rh;
-    private double outTemp;
-    private int dust;
-    private int co2;
-    private int voc;
-    private int mode;
-    private int damper;
-    private int fanStatus;
-    private int fanSpeed;
+    private double inTemp; // 실내온도
+    private double rh; // 습도
+    private double outTemp; // 실외온도
+    private int dust; // 미세먼지
+    private int co2; // CO2
+    private int voc; // VOC
+    private int mode; // 모드
+    private int damper; // 댐퍼
+    private int fanStatus; // 팬 상태
+    private int fanSpeed; // 풍량
 
     public void setInTemp(double inTemp) {
         this.inTemp = calculateTemp(inTemp);
@@ -29,3 +29,4 @@ public class VentClient {
         return temp;
     }
 }
+
